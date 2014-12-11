@@ -1,6 +1,9 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+.subunit {
+  fill: white;
+}
 .subunit.GAZ {
   fill: #ddc;
 }
@@ -8,13 +11,19 @@ body {
   fill: #cdd;
 }
 .subunit.WEB {
-  fill: #dcd;
+  fill: #ddc;
+}
+svg {
+  background-color: skyblue ;
 }
 .subunit-boundary {
   fill: none;
   stroke: #777;
   stroke-dasharray: 2,2;
   stroke-linejoin: round;
+}
+.subunit-boundary.neighbour {
+  stroke-dasharray: 0.1,0.1;
 }
 .subunit-label {
   fill: #777;

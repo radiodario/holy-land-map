@@ -10025,10 +10025,10 @@ d3.json("data/holy_land.json", function(error, holyLand) {
   var places  = topojson.feature(holyLand, holyLand.objects.holy_places);
 
   var projection = d3.geo.albers()
-    .center([35.5, 31.5])
+    .center([35.5, 31.7])
     .parallels([30, 40])
     .rotate([0, 0])
-    .scale(16000)
+    .scale(22200)
     .translate([width/2, height/2]);
 
   var path = d3.geo.path()
@@ -10043,9 +10043,16 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       .attr("d", path)
 
   svg.append("path")
-    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) { return a !== b }))
+    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
+      return a !== b }))
     .attr("d", path)
     .attr("class", "subunit-boundary")
+
+  svg.append("path")
+    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
+      return a === b && ": EGY JOR LBN SYR".indexOf(a.id) > 0}))
+    .attr("d", path)
+    .attr("class", "subunit-boundary neighbour")
 
 
   svg.selectAll(".subunit-label")
@@ -10055,7 +10062,21 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       .attr("class", function(d) { return "subunit-label " + d.id; })
       .attr("dy", ".35em")
       .attr("transform", function(d) {
-        return "translate(" + path.centroid(d) + ")";
+
+        var offset = [0, 0]
+
+        // special case so that israel's label doesn't
+        // fall inside the west bank ;_;
+        if (d.properties.name === "Israel") {
+          offset = [-70, -30];
+        }
+
+        var centroid = path.centroid(d)
+        var position = centroid.map(function(d, i) {
+          return d + offset[i];
+        })
+
+        return "translate(" + position + ")";
       })
       .text(function(d) {
         return d.properties.name;
