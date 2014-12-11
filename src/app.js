@@ -47,7 +47,21 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       .attr("class", function(d) { return "subunit-label " + d.id; })
       .attr("dy", ".35em")
       .attr("transform", function(d) {
-        return "translate(" + path.centroid(d) + ")";
+
+        var offset = [0, 0]
+
+        // special case so that israel's label doesn't
+        // fall inside the west bank ;_;
+        if (d.properties.name === "Israel") {
+          offset = [-60, -30];
+        }
+
+        var centroid = path.centroid(d)
+        var position = centroid.map(function(d, i) {
+          return d + offset[i];
+        })
+
+        return "translate(" + position + ")";
       })
       .text(function(d) {
         return d.properties.name;
