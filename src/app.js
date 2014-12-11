@@ -17,10 +17,10 @@ d3.json("data/holy_land.json", function(error, holyLand) {
   var places  = topojson.feature(holyLand, holyLand.objects.holy_places);
 
   var projection = d3.geo.albers()
-    .center([35.5, 31.5])
+    .center([35.5, 31.7])
     .parallels([30, 40])
     .rotate([0, 0])
-    .scale(16000)
+    .scale(22200)
     .translate([width/2, height/2]);
 
   var path = d3.geo.path()
@@ -60,7 +60,7 @@ d3.json("data/holy_land.json", function(error, holyLand) {
         // special case so that israel's label doesn't
         // fall inside the west bank ;_;
         if (d.properties.name === "Israel") {
-          offset = [-60, -30];
+          offset = [-70, -30];
         }
 
         var centroid = path.centroid(d)
