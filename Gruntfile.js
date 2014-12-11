@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       },
 
       assets: {
-        files: ['assets/**/*', '*.css', 'images/**/*', 'img/**/*', '!Gruntfile.js'],
+        files: ['assets/**/*', '*.css', 'images/**/*', 'data/**/*', 'img/**/*', '!Gruntfile.js'],
         tasks: ['copy'],
       }
     },
