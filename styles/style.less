@@ -5,6 +5,8 @@ body {
 
 .subunit {
 
+  fill: white;
+
   &.GAZ {
     fill: #ddc;
   }
@@ -15,6 +17,12 @@ body {
     fill: #ddc;
   }
 
+
+
+}
+
+svg {
+  background-color: skyblue ;
 }
 
 .subunit-boundary {
@@ -22,6 +30,11 @@ body {
   stroke: #777;
   stroke-dasharray: 2,2;
   stroke-linejoin: round;
+
+  &.neighbour {
+    stroke-dasharray: 0.1,0.1;
+  }
+
 }
 
 .subunit-label {

@@ -35,9 +35,16 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       .attr("d", path)
 
   svg.append("path")
-    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) { return a !== b }))
+    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
+      return a !== b }))
     .attr("d", path)
     .attr("class", "subunit-boundary")
+
+  svg.append("path")
+    .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
+      return a === b && ": EGY JOR LBN SYR".indexOf(a.id) > 0}))
+    .attr("d", path)
+    .attr("class", "subunit-boundary neighbour")
 
 
   svg.selectAll(".subunit-label")
