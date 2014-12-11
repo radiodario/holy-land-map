@@ -18,7 +18,8 @@
     "url": "git://github.com/radiodario/holy-land-map.git"
   },
   "dependencies": {
-
+    "d3": "^3.5.2",
+    "topojson": "^1.6.18"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
