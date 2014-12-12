@@ -10010,7 +10010,7 @@ var d3 = require('d3');
 var topojson = require('topojson');
 
 
-var width = 960;
+var width = 760;
 var height = 1160;
 
 var svg = d3.select("body").append("svg")
@@ -10045,7 +10045,7 @@ d3.json("data/holy_land.json", function(error, holyLand) {
   var rivers = topojson.feature(holyLand, holyLand.objects.holy_rivers);
 
   var projection = d3.geo.albers()
-    .center([35.5, 31.08])
+    .center([35.0, 31.2])
     .parallels([30, 40])
     .rotate([0, 0])
     .scale(20000)
