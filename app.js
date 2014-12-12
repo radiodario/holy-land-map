@@ -10017,11 +10017,23 @@ var svg = d3.select("body").append("svg")
   .attr("width", width)
   .attr("height", height);
 
-var mapLayer = svg.append("g")
-  .attr("class", "map-layer");
+var politicalLayer = svg.append("g")
+  .attr("class", "political-layer");
+
+var waterLayer = svg.append("g")
+  .attr("class", "water-layer");
+
+var townsLayer = svg.append("g")
+  .attr("class", "towns-layer");
 
 var tripsLayer = svg.append("g")
-  .attr("class", "trips-layer")
+  .attr("class", "trips-layer");
+
+var timeScale = d3.scale.linear()
+   .range(["rgb(44,163,219)", "rgb(253,88,6)"])
+   .interpolate(d3.interpolateHcl);
+
+
 
 
 d3.json("data/holy_land.json", function(error, holyLand) {
@@ -10029,6 +10041,8 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
   var subunits = topojson.feature(holyLand, holyLand.objects.holy_admin);
   var places  = topojson.feature(holyLand, holyLand.objects.holy_places);
+  var water = topojson.feature(holyLand, holyLand.objects.holy_water);
+  var rivers = topojson.feature(holyLand, holyLand.objects.holy_rivers);
 
   var projection = d3.geo.albers()
     .center([35.5, 31.08])
@@ -10041,27 +10055,27 @@ d3.json("data/holy_land.json", function(error, holyLand) {
     .projection(projection)
     .pointRadius(2);
 
-  mapLayer.selectAll(".subunit")
+  politicalLayer.selectAll(".subunit")
     .data(subunits.features)
     .enter()
       .append("path")
       .attr("class", function(d) { return "subunit " + d.id; })
       .attr("d", path)
 
-  mapLayer.append("path")
+  politicalLayer.append("path")
     .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
       return a !== b }))
     .attr("d", path)
     .attr("class", "subunit-boundary")
 
-  mapLayer.append("path")
+  politicalLayer.append("path")
     .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
       return a === b && ": EGY JOR LBN SYR".indexOf(a.id) > 0}))
     .attr("d", path)
     .attr("class", "subunit-boundary neighbour")
 
 
-  mapLayer.selectAll(".subunit-label")
+  politicalLayer.selectAll(".subunit-label")
     .data(subunits.features)
     .enter()
       .append("text")
@@ -10088,18 +10102,17 @@ d3.json("data/holy_land.json", function(error, holyLand) {
         return d.properties.name;
       })
 
-  mapLayer.append("path")
+  townsLayer.append("path")
     .datum(places)
     .attr("d", path)
     .attr("class", "place");
 
-  mapLayer.selectAll(".place-label")
+  townsLayer.selectAll(".place-label")
     .data(places.features)
     .enter()
       .append("text")
       .attr("class", "place-label")
       .attr("transform", function(d) {
-        console.log(d.geometry.coordinates)
         return "translate(" + projection(d.geometry.coordinates) + ")";
       })
       .attr("dy", ".35em")
@@ -10108,14 +10121,40 @@ d3.json("data/holy_land.json", function(error, holyLand) {
         return d.properties.name;
       })
 
+  waterLayer.selectAll(".water-feature")
+    .data(water.features)
+    .enter()
+      .append("path")
+      .attr("class", function(d) {
+        return "water-feature " + d.properties.name;
+      })
+      .attr("d", path)
+
+  waterLayer.selectAll(".river")
+    .data(rivers.features)
+    .enter()
+      .append("path")
+      .attr("class", function(d) { return "river " + d.properties.name })
+      .attr("d", path)
+
   d3.json("data/towns.json", function(error, towns) {
     if (error) return console.error(error);
+
+    var townList = d3.keys(towns.places).map(function(d) {
+      return towns.places[d];
+    });
+
     d3.csv("data/trips.csv", function(error, trips) {
 
       if (error) return console.error(error);
 
       var lines = tripsLayer.selectAll("line")
         .data(trips);
+
+      var timeDomain = [0, d3.max(trips, function(d) { return +d.time; })];
+
+      timeScale.domain(timeDomain);
+
 
       lines.enter()
         .append("line")
@@ -10127,12 +10166,34 @@ d3.json("data/holy_land.json", function(error, holyLand) {
           return projection(towns.places[d.from].coordinates)[1]
         })
         .attr("x2", function(d) {
-          console.log(d.to)
           return projection(towns.places[d.to].coordinates)[0]
         })
         .attr("y2", function(d) {
           return projection(towns.places[d.to].coordinates)[1]
         })
+        .style("stroke", function(d) {
+          return timeScale(+d.time)
+        })
+
+      var places = tripsLayer.selectAll("g")
+        .data(townList);
+
+      placesEnter = places.enter().append('g')
+        .attr("class", "place")
+        .attr('transform', function(d) {
+          return "translate(" + projection(d.coordinates) + ")"
+        });
+
+      placesEnter.append('circle')
+        .attr("r", 2);
+
+      placesEnter.append('text')
+        .attr("class", "place-label")
+        .attr("dy", ".35em")
+        .attr("dx", 6)
+        .text(function(d) {
+          return d.name;
+        });
 
     })
   })

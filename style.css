@@ -13,6 +13,15 @@ body {
 .subunit.WEB {
   fill: #ddc;
 }
+.river {
+  fill: none;
+  stroke: skyblue;
+  stroke-opacity: 0.5;
+}
+.water-feature {
+  fill-opacity: 0.5;
+  fill: skyblue;
+}
 svg {
   background-color: skyblue ;
 }
@@ -42,6 +51,6 @@ text {
   pointer-events: none;
 }
 .trip {
-  stroke: blue;
+  stroke: rgba(20, 20, 20, 0.2);
   stroke-width: 2px;
 }
