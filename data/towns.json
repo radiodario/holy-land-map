@@ -3,58 +3,72 @@
 
     "Beit Sahour" : {
       "name" : "Beit Sahour",
+      "anchor" : "start",
       "coordinates" : [35.221108, 31.704590]
     },
     "Damascus Gate" : {
       "name" : "Damascus Gate",
+      "anchor" : "end",
       "coordinates" : [35.228650, 31.781680]
     },
     "Jaffa" : {
       "name" : "Jaffa",
+      "anchor" : "end",
       "coordinates" : [34.756239, 32.054983]
     },
     "Hebron" : {
       "name" : "Hebron",
+      "anchor" : "start",
       "coordinates" : [35.096884, 31.528494]
     },
     "Ramallah" : {
       "name" : "Ramallah",
+      "anchor" : "start",
       "coordinates" : [35.204424, 31.904932]
     },
     "Nazareth" : {
       "name" : "Nazareth",
+      "anchor" : "start",
       "coordinates" : [35.303600, 32.699783]
     },
     "Gaza" : {
       "name" : "Gaza",
+      "anchor" : "end",
       "coordinates" : [34.351033, 31.417192]
     },
     "Ben Gurion" : {
       "name" : "Ben Gurion",
+      "anchor" : "start",
       "coordinates" : [34.873083, 32.003653]
     },
     "Holon" : {
       "name" : "Holon",
+      "anchor" : "end",
       "coordinates" : [34.762298, 32.004804]
     },
     "Beit Jala" : {
       "name" : "Beit Jala",
+      "anchor" : "end",
       "coordinates" : [35.183522, 31.717168]
     },
     "Al Quds Uni" : {
       "name" : "Al Quds Uni",
+      "anchor" : "start",
       "coordinates" : [35.260018, 31.755859]
     },
     "Haifa" : {
       "name" : "Haifa",
+      "anchor" : "start",
       "coordinates" : [35.033967, 32.792478]
     },
     "Dead Sea" : {
       "name" : "Dead Sea",
+      "anchor" : "start",
       "coordinates" : [35.448744, 31.674636]
     },
     "Eilat" : {
       "name" : "Eilat",
+      "anchor" : "start",
       "coordinates" : [34.900075, 29.555831]
     }
   }

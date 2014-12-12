@@ -10023,17 +10023,15 @@ var politicalLayer = svg.append("g")
 var waterLayer = svg.append("g")
   .attr("class", "water-layer");
 
-var townsLayer = svg.append("g")
-  .attr("class", "towns-layer");
-
 var tripsLayer = svg.append("g")
   .attr("class", "trips-layer");
+
+var townsLayer = svg.append("g")
+  .attr("class", "towns-layer");
 
 var timeScale = d3.scale.linear()
    .range(["rgb(44,163,219)", "rgb(253,88,6)"])
    .interpolate(d3.interpolateHcl);
-
-
 
 
 d3.json("data/holy_land.json", function(error, holyLand) {
@@ -10100,6 +10098,9 @@ d3.json("data/holy_land.json", function(error, holyLand) {
           case "Syria":
             offset = [-240, 1040];
             break;
+          case "Gaza":
+            offset = [-20, 30];
+            break;
           default:
             offset = [0,0];
             break;
@@ -10116,24 +10117,24 @@ d3.json("data/holy_land.json", function(error, holyLand) {
         return d.properties.name;
       })
 
-  townsLayer.append("path")
-    .datum(places)
-    .attr("d", path)
-    .attr("class", "place");
+  // townsLayer.append("path")
+  //   .datum(places)
+  //   .attr("d", path)
+  //   .attr("class", "place");
 
-  townsLayer.selectAll(".place-label")
-    .data(places.features)
-    .enter()
-      .append("text")
-      .attr("class", "place-label")
-      .attr("transform", function(d) {
-        return "translate(" + projection(d.geometry.coordinates) + ")";
-      })
-      .attr("dy", ".35em")
-      .attr("dx", 6)
-      .text(function(d) {
-        return d.properties.name;
-      })
+  // townsLayer.selectAll(".place-label")
+  //   .data(places.features)
+  //   .enter()
+  //     .append("text")
+  //     .attr("class", "place-label")
+  //     .attr("transform", function(d) {
+  //       return "translate(" + projection(d.geometry.coordinates) + ")";
+  //     })
+  //     .attr("dy", ".35em")
+  //     .attr("dx", 6)
+  //     .text(function(d) {
+  //       return d.properties.name;
+  //     })
 
   waterLayer.selectAll(".water-feature")
     .data(water.features)
@@ -10189,7 +10190,7 @@ d3.json("data/holy_land.json", function(error, holyLand) {
           return timeScale(+d.time)
         })
 
-      var places = tripsLayer.selectAll("g")
+      var places = townsLayer.selectAll("g")
         .data(townList);
 
       placesEnter = places.enter().append('g')
@@ -10203,8 +10204,13 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
       placesEnter.append('text')
         .attr("class", "place-label")
+        .style("text-anchor", function(d) {
+          return d.anchor;
+        })
         .attr("dy", ".35em")
-        .attr("dx", 6)
+        .attr("dx", function(d) {
+          return (d.anchor === "start") ? 6 : -6;
+        })
         .text(function(d) {
           return d.name;
         });
