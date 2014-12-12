@@ -10083,12 +10083,26 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       .attr("dy", ".35em")
       .attr("transform", function(d) {
 
-        var offset = [0, 0];
+        var offset;
 
         // special case so that israel's label doesn't
         // fall inside the west bank ;_;
-        if (d.properties.name === "Israel") {
-          offset = [-70, -30];
+        switch (d.properties.name) {
+          case "Israel":
+            offset = [-70, -30];
+            break;
+          case "Egypt":
+            offset = [750, -1700];
+            break;
+          case "Jordan":
+            offset = [-200, 0];
+            break;
+          case "Syria":
+            offset = [-240, 1040];
+            break;
+          default:
+            offset = [0,0];
+            break;
         }
 
         var centroid = path.centroid(d)
