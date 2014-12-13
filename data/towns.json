@@ -70,6 +70,26 @@
       "name" : "Eilat",
       "anchor" : "start",
       "coordinates" : [34.900075, 29.555831]
+    },
+    "Nablus" : {
+      "name" : "Nablus",
+      "anchor" : "start",
+      "coordinates": [35.261147, 32.205756]
+    },
+    "Jericho" : {
+      "name" : "Jericho",
+      "anchor" : "start",
+      "coordinates": [35.462911, 31.858156]
+    },
+    "Jenin" : {
+      "name" : "Jenin",
+      "anchor" : "start",
+      "coordinates": [35.302697, 32.461661]
+    },
+    "Beer Sheva" : {
+      "name" : "Beer Sheva",
+      "anchor" : "start",
+      "coordinates": [34.791469, 31.252992]
     }
   }
 }

@@ -1,4 +1,4 @@
-time,from,to
+time,to,from
 229,Beit Sahour,Holon
 79,Beit Sahour,Damascus Gate
 120,Beit Sahour,Ramallah
@@ -20,3 +20,18 @@ time,from,to
 420,Gaza,Eilat
 60,Ben Gurion,Damascus Gate
 30,Ben Gurion,Jaffa
+120,Damascus Gate,Jericho
+60,Beit Sahour,Jericho
+210,Beer Sheva,Gaza
+210,Beer Sheva,Hebron
+90,Beer Sheva,Jaffa
+180,Beer Sheva,Eilat
+150,Damascus Gate,Nablus
+180,Ramallah,Nablus
+180,Jericho,Nablus
+150,Jaffa,Nablus
+60,Nablus,Jenin
+180,Beit Sahour,Jenin
+150,Jenin,Haifa
+150,Jenin,Nazareth
+180,Jenin,Jaffa
