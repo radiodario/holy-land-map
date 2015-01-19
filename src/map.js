@@ -23,7 +23,8 @@ var projection = d3.geo.albers()
   .center([35.0, 31.2])
   .parallels([30, 40])
   .rotate([0, 0])
-  .scale(20000)
+  .scale(20000);
+
 
 var path = d3.geo.path()
   .projection(projection)
@@ -41,7 +42,8 @@ module.exports = {
     h = height;
 
     projection
-      .translate([width/2, height/2]);
+      .translate([width/2, height/2])
+      .clipExtent([[0, 0], [width, height]]);
 
     svg = container;
   },
@@ -108,15 +110,6 @@ module.exports = {
             case "Israel":
               offset = [-70, -30];
               break;
-            case "Egypt":
-              offset = [750, -1700];
-              break;
-            case "Jordan":
-              offset = [-200, 0];
-              break;
-            case "Syria":
-              offset = [-240, 1040];
-              break;
             case "Gaza":
               offset = [-20, 30];
               break;
@@ -129,6 +122,10 @@ module.exports = {
           var position = centroid.map(function(d, i) {
             return d + offset[i];
           })
+
+          if (!position[0] || !position[1]) {
+            position = [-1000, -1000];
+          }
 
           return "translate(" + position + ")";
         })
