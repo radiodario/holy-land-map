@@ -8,9 +8,13 @@ var svg;
 
 var nodeG, linkG;
 
+var w, h;
+
 module.exports = {
 
   init: function(container, width, height) {
+    w = width;
+    h = height;
     force.size([width, height]);
     svg = container;
   },
@@ -33,6 +37,15 @@ module.exports = {
 
         nodeG
           .attr('transform', function(d) {
+            debugger;
+            var nodeW = this.getBBox().width;
+            var nodeH = this.getBBox().height;
+
+            // bounding box so gaza doesn't scurry
+            // off into the mediterranean
+            d.x = Math.max(nodeW, Math.min(w - nodeW, d.x));
+            d.y = Math.max(nodeH, Math.min(h - nodeH, d.y));
+
             return "translate(" + d.x + ',' + d.y + ')';
           });
 
@@ -42,7 +55,6 @@ module.exports = {
           .attr("y1", function(d) { return d.source.y; })
           .attr("y2", function(d) { return d.target.y; });
       });
-
 
   },
 

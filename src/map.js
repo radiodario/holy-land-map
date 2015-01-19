@@ -254,6 +254,14 @@ module.exports = {
   },
 
   hideMap : function() {
+    svg.select('rect.sea').transition()
+      .duration(duration)
+      .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
+
+
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 0)
@@ -271,6 +279,14 @@ module.exports = {
   },
 
   showMap : function() {
+
+    svg.select('rect.sea').transition()
+      .duration(duration)
+      .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
+
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 1)
