@@ -1,6 +1,12 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+svg {
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0, 0, 0);
+  /* or */
+}
 .subunit {
   fill: white;
 }
