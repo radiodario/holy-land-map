@@ -13,7 +13,7 @@ var waterLayer;
 var tripsLayer;
 var townsLayer;
 
-var duration = 1000;
+var duration = 200;
 
 var timeScale = d3.scale.linear()
    .range(["rgb(44,163,219)", "rgb(253,88,6)"])
@@ -224,12 +224,12 @@ module.exports = {
   },
 
   showTowns : function() {
-    townsLayer.transition()
+    townsLayer
+      .style('display', null)
+      .transition()
       .duration(duration)
       .style('opacity', 1)
-      .each('end', function() {
-        d3.select(this).style('display', null)
-      })
+
   },
 
   hideTrips: function() {
@@ -242,31 +242,17 @@ module.exports = {
   },
 
   showTrips : function() {
-    tripsLayer.transition()
+    tripsLayer
+      .style('display', null)
+      .transition()
       .duration(duration)
       .style('opacity', 1)
-      .each('end', function() {
-        d3.select(this).style('display', null)
-      })
+
   },
 
   hideMap : function() {
-    svg.select('rect.sea').transition()
-      .duration(duration)
-      .style('opacity', 0)
-      .each('end', function() {
-        d3.select(this).style('display', 'none')
-      })
-
-
-    politicalLayer.transition()
-      .duration(duration)
-      .style('opacity', 0)
-      .each('end', function() {
-        d3.select(this).style('display', 'none')
-      })
-
-    waterLayer.transition()
+    svg.selectAll('rect.sea, .political-layer, .water-layer')
+      .transition()
       .duration(duration)
       .style('opacity', 0)
       .each('end', function() {
@@ -277,26 +263,12 @@ module.exports = {
 
   showMap : function() {
 
-    svg.select('rect.sea').transition()
+    svg.selectAll('rect.sea, .political-layer, .water-layer')
+      .style('display', null)
+      .transition()
       .duration(duration)
       .style('opacity', 1)
-      .each('end', function() {
-        d3.select(this).style('display', null)
-      })
 
-    politicalLayer.transition()
-      .duration(duration)
-      .style('opacity', 1)
-      .each('end', function() {
-        d3.select(this).style('display', null)
-      })
-
-    waterLayer.transition()
-      .duration(duration)
-      .style('opacity', 1)
-      .each('end', function() {
-        d3.select(this).style('display', null)
-      })
   }
 
 
