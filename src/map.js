@@ -11,6 +11,8 @@ var waterLayer;
 var tripsLayer;
 var townsLayer;
 
+var duration = 1000;
+
 var timeScale = d3.scale.linear()
    .range(["rgb(44,163,219)", "rgb(253,88,6)"])
    .interpolate(d3.interpolateHcl);
@@ -196,6 +198,51 @@ module.exports = {
       .text(function(d) {
         return d.name;
       });
+  },
+
+  hideTowns: function() {
+    townsLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+  },
+
+  showTowns : function() {
+    townsLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+  },
+
+  hideTrips: function() {
+    tripsLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+  },
+
+  showTrips : function() {
+    tripsLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+  },
+
+  hideMap : function() {
+    politicalLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+
+    waterLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+
+  },
+
+  showMap : function() {
+    politicalLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+
+    waterLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
   }
 
 

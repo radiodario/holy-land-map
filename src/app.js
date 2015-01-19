@@ -35,6 +35,17 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 });
 
 
+// set up temporary buttons
+var showMap = document.querySelector('#showMap');
+var hideMap = document.querySelector('#hideMap');
+var showTrips = document.querySelector('#showTrips');
+var hideTrips = document.querySelector('#hideTrips');
+var showTowns = document.querySelector('#showTowns');
+var hideTowns = document.querySelector('#hideTowns');
 
-
-
+showMap.addEventListener('click', map.showMap.bind(map));
+hideMap.addEventListener('click', map.hideMap.bind(map));
+showTrips.addEventListener('click', map.showTrips.bind(map));
+hideTrips.addEventListener('click', map.hideTrips.bind(map));
+showTowns.addEventListener('click', map.showTowns.bind(map));
+hideTowns.addEventListener('click', map.hideTowns.bind(map));
