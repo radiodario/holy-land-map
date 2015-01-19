@@ -1,6 +1,7 @@
 var d3 = require('d3');
-
 var map = require('./map');
+var graph = require('./graph');
+var processData = require('./processData');
 
 var width = 760;
 var height = 1160;
@@ -10,7 +11,9 @@ var svg = d3.select("body").append("svg")
   .attr("height", height);
 
 map.init(svg, width, height);
+graph.init(svg, width, height);
 
+var holyLand, towns, trips;
 
 d3.json("data/holy_land.json", function(error, holyLand) {
   if (error) return console.error(error);
@@ -28,6 +31,8 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
       map.drawTrips(towns, trips);
 
+      graph.draw(processData.towns(towns), processData.trips(towns, trips));
+
     });
 
   });
@@ -42,6 +47,7 @@ var showTrips = document.querySelector('#showTrips');
 var hideTrips = document.querySelector('#hideTrips');
 var showTowns = document.querySelector('#showTowns');
 var hideTowns = document.querySelector('#hideTowns');
+var doGraph = document.querySelector('#doGraph');
 
 showMap.addEventListener('click', map.showMap.bind(map));
 hideMap.addEventListener('click', map.hideMap.bind(map));
@@ -49,3 +55,4 @@ showTrips.addEventListener('click', map.showTrips.bind(map));
 hideTrips.addEventListener('click', map.hideTrips.bind(map));
 showTowns.addEventListener('click', map.showTowns.bind(map));
 hideTowns.addEventListener('click', map.hideTowns.bind(map));
+doGraph.addEventListener('click', graph.start);

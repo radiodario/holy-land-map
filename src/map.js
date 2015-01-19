@@ -6,6 +6,8 @@ var places;
 var water;
 var rivers;
 
+var w, h;
+
 var politicalLayer;
 var waterLayer;
 var tripsLayer;
@@ -34,6 +36,10 @@ var towns;
 module.exports = {
 
   init: function(container, width, height) {
+
+    w = width;
+    h = height;
+
     projection
       .translate([width/2, height/2]);
 
@@ -45,6 +51,14 @@ module.exports = {
     places  = topojson.feature(holyLand, holyLand.objects.holy_places);
     water = topojson.feature(holyLand, holyLand.objects.holy_water);
     rivers = topojson.feature(holyLand, holyLand.objects.holy_rivers);
+
+    svg.append("rect")
+      .classed("sea", true)
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', w)
+      .attr('height', h)
+
 
     politicalLayer = svg.append("g")
       .attr("class", "political-layer");
@@ -147,7 +161,6 @@ module.exports = {
 
     timeScale.domain(timeDomain);
 
-
     lines.enter()
       .append("line")
       .attr("class", "trip")
@@ -171,7 +184,11 @@ module.exports = {
   drawTowns: function(towns) {
 
     var townList = d3.keys(towns.places).map(function(d) {
-      return towns.places[d];
+      var t = towns.places[d];
+      var c = projection(t.coordinates);
+      t.x = c[0];
+      t.y = c[1];
+      return t;
     });
 
     var places = townsLayer.selectAll("g")
@@ -204,34 +221,52 @@ module.exports = {
     townsLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
   },
 
   showTowns : function() {
     townsLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   },
 
   hideTrips: function() {
     tripsLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
   },
 
   showTrips : function() {
     tripsLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   },
 
   hideMap : function() {
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
 
     waterLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
 
   },
 
@@ -239,10 +274,16 @@ module.exports = {
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
 
     waterLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   }
 
 
