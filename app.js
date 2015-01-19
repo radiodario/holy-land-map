@@ -10127,6 +10127,9 @@ module.exports = {
 
   start: function() {
 
+    svg.selectAll('.towns-layer .place circle').transition()
+      .duration(100)
+      .attr('r', 3)
 
     force.start();
   }
