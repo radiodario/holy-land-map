@@ -10007,8 +10007,9 @@
 
 },{}],3:[function(require,module,exports){
 var d3 = require('d3');
-
 var map = require('./map');
+var graph = require('./graph');
+var processData = require('./processData');
 
 var width = 760;
 var height = 1160;
@@ -10018,7 +10019,9 @@ var svg = d3.select("body").append("svg")
   .attr("height", height);
 
 map.init(svg, width, height);
+graph.init(svg, width, height);
 
+var holyLand, towns, trips;
 
 d3.json("data/holy_land.json", function(error, holyLand) {
   if (error) return console.error(error);
@@ -10036,6 +10039,8 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
       map.drawTrips(towns, trips);
 
+      graph.draw(processData.towns(towns), processData.trips(towns, trips));
+
     });
 
   });
@@ -10050,6 +10055,7 @@ var showTrips = document.querySelector('#showTrips');
 var hideTrips = document.querySelector('#hideTrips');
 var showTowns = document.querySelector('#showTowns');
 var hideTowns = document.querySelector('#hideTowns');
+var doGraph = document.querySelector('#doGraph');
 
 showMap.addEventListener('click', map.showMap.bind(map));
 hideMap.addEventListener('click', map.hideMap.bind(map));
@@ -10057,17 +10063,13 @@ showTrips.addEventListener('click', map.showTrips.bind(map));
 hideTrips.addEventListener('click', map.hideTrips.bind(map));
 showTowns.addEventListener('click', map.showTowns.bind(map));
 hideTowns.addEventListener('click', map.hideTowns.bind(map));
-},{"./map":5,"d3":1}],4:[function(require,module,exports){
+doGraph.addEventListener('click', graph.start);
+},{"./graph":4,"./map":5,"./processData":6,"d3":1}],4:[function(require,module,exports){
 var d3 = require('d3');
 
 var force = d3.layout.force()
-    .linkStrength(0.1)
-    .friction(0.9)
-    .linkDistance(20)
-    .charge(-1)
-    .gravity(0.1)
-    .theta(0.8)
-    .alpha(0.1)
+    .gravity(0)
+    .charge(0)
 
 var svg;
 
@@ -10080,30 +10082,41 @@ module.exports = {
     svg = container;
   },
 
-  draw: function (nodes, links, nodeGroup, linkGroup) {
+  draw: function (nodes, links) {
+
+    nodeG = svg.selectAll('.towns-layer .place');
+    linkG = svg.selectAll('.trips-layer .trip');
+
+    nodeG.data(nodes)
+    linkG.data(links)
+
     force
+      .linkDistance(function(d) {
+        return +d.time;
+      })
       .nodes(nodes)
       .links(links)
+      .on("tick", function() {
 
-    nodeG = nodeGroup.selectAll('.place');
-    linkG = linkGroup.selectAll('.trip');
+        nodeG
+          .attr('transform', function(d) {
+            return "translate(" + d.x + ',' + d.y + ')';
+          });
 
-    force.on("tick", function() {
+        linkG
+          .attr("x1", function(d) { return d.source.x; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("y2", function(d) { return d.target.y; });
+      });
 
-      nodeG.transform(function(d) {
-        return "translate(" + d.x + ',' + d.y + ')';
-      })
 
-      linkG
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("y2", function(d) { return d.target.y; });
+  },
 
-    });
+  start: function() {
+
 
     force.start();
-
   }
 
 }
@@ -10115,6 +10128,8 @@ var subunits;
 var places;
 var water;
 var rivers;
+
+var w, h;
 
 var politicalLayer;
 var waterLayer;
@@ -10144,6 +10159,10 @@ var towns;
 module.exports = {
 
   init: function(container, width, height) {
+
+    w = width;
+    h = height;
+
     projection
       .translate([width/2, height/2]);
 
@@ -10155,6 +10174,14 @@ module.exports = {
     places  = topojson.feature(holyLand, holyLand.objects.holy_places);
     water = topojson.feature(holyLand, holyLand.objects.holy_water);
     rivers = topojson.feature(holyLand, holyLand.objects.holy_rivers);
+
+    svg.append("rect")
+      .classed("sea", true)
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', w)
+      .attr('height', h)
+
 
     politicalLayer = svg.append("g")
       .attr("class", "political-layer");
@@ -10257,7 +10284,6 @@ module.exports = {
 
     timeScale.domain(timeDomain);
 
-
     lines.enter()
       .append("line")
       .attr("class", "trip")
@@ -10281,7 +10307,11 @@ module.exports = {
   drawTowns: function(towns) {
 
     var townList = d3.keys(towns.places).map(function(d) {
-      return towns.places[d];
+      var t = towns.places[d];
+      var c = projection(t.coordinates);
+      t.x = c[0];
+      t.y = c[1];
+      return t;
     });
 
     var places = townsLayer.selectAll("g")
@@ -10314,34 +10344,52 @@ module.exports = {
     townsLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
   },
 
   showTowns : function() {
     townsLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   },
 
   hideTrips: function() {
     tripsLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
   },
 
   showTrips : function() {
     tripsLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   },
 
   hideMap : function() {
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
 
     waterLayer.transition()
       .duration(duration)
       .style('opacity', 0)
+      .each('end', function() {
+        d3.select(this).style('display', 'none')
+      })
 
   },
 
@@ -10349,12 +10397,63 @@ module.exports = {
     politicalLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
 
     waterLayer.transition()
       .duration(duration)
       .style('opacity', 1)
+      .each('end', function() {
+        d3.select(this).style('display', null)
+      })
   }
 
 
 }
-},{"d3":1,"topojson":2}]},{},[3,4,5])
+},{"d3":1,"topojson":2}],6:[function(require,module,exports){
+// create a nodes array by iterating over the keys
+function townlist(towns) {
+  return Object.keys(towns.places).map(function(k) {
+      return towns.places[k];
+    });
+}
+
+// lookup a town
+function lookupTown(townlist, townname) {
+  var i, l;
+
+  for (i = 0, l = townlist.length; i < l; i++) {
+    if (townlist[i].name === townname) return i;
+  }
+
+  return -1 // we haven't found it;
+
+}
+
+
+
+module.exports = {
+
+  towns: townlist,
+
+  trips: function(towns, trips) {
+
+    var tlist = townlist(towns);
+
+    return trips.map(function(t) {
+
+      return {
+        time: t.time,
+        source: lookupTown(tlist, t.from),
+        target: lookupTown(tlist, t.to)
+      };
+
+    });
+  }
+};
+
+
+
+
+},{}]},{},[3,4,5,6])
