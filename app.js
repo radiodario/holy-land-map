@@ -10043,11 +10043,71 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 });
 
 
+// set up temporary buttons
+var showMap = document.querySelector('#showMap');
+var hideMap = document.querySelector('#hideMap');
+var showTrips = document.querySelector('#showTrips');
+var hideTrips = document.querySelector('#hideTrips');
+var showTowns = document.querySelector('#showTowns');
+var hideTowns = document.querySelector('#hideTowns');
 
+showMap.addEventListener('click', map.showMap.bind(map));
+hideMap.addEventListener('click', map.hideMap.bind(map));
+showTrips.addEventListener('click', map.showTrips.bind(map));
+hideTrips.addEventListener('click', map.hideTrips.bind(map));
+showTowns.addEventListener('click', map.showTowns.bind(map));
+hideTowns.addEventListener('click', map.hideTowns.bind(map));
+},{"./map":5,"d3":1}],4:[function(require,module,exports){
+var d3 = require('d3');
 
+var force = d3.layout.force()
+    .linkStrength(0.1)
+    .friction(0.9)
+    .linkDistance(20)
+    .charge(-1)
+    .gravity(0.1)
+    .theta(0.8)
+    .alpha(0.1)
 
+var svg;
 
-},{"./map":4,"d3":1}],4:[function(require,module,exports){
+var nodeG, linkG;
+
+module.exports = {
+
+  init: function(container, width, height) {
+    force.size([width, height]);
+    svg = container;
+  },
+
+  draw: function (nodes, links, nodeGroup, linkGroup) {
+    force
+      .nodes(nodes)
+      .links(links)
+
+    nodeG = nodeGroup.selectAll('.place');
+    linkG = linkGroup.selectAll('.trip');
+
+    force.on("tick", function() {
+
+      nodeG.transform(function(d) {
+        return "translate(" + d.x + ',' + d.y + ')';
+      })
+
+      linkG
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    });
+
+    force.start();
+
+  }
+
+}
+},{"d3":1}],5:[function(require,module,exports){
 var d3 = require('d3');
 var topojson = require('topojson');
 
@@ -10060,6 +10120,8 @@ var politicalLayer;
 var waterLayer;
 var tripsLayer;
 var townsLayer;
+
+var duration = 1000;
 
 var timeScale = d3.scale.linear()
    .range(["rgb(44,163,219)", "rgb(253,88,6)"])
@@ -10246,8 +10308,53 @@ module.exports = {
       .text(function(d) {
         return d.name;
       });
+  },
+
+  hideTowns: function() {
+    townsLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+  },
+
+  showTowns : function() {
+    townsLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+  },
+
+  hideTrips: function() {
+    tripsLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+  },
+
+  showTrips : function() {
+    tripsLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+  },
+
+  hideMap : function() {
+    politicalLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+
+    waterLayer.transition()
+      .duration(duration)
+      .style('opacity', 0)
+
+  },
+
+  showMap : function() {
+    politicalLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
+
+    waterLayer.transition()
+      .duration(duration)
+      .style('opacity', 1)
   }
 
 
 }
-},{"d3":1,"topojson":2}]},{},[3,4])
+},{"d3":1,"topojson":2}]},{},[3,4,5])
