@@ -10069,7 +10069,8 @@ var d3 = require('d3');
 
 var force = d3.layout.force()
     .gravity(0)
-    .charge(0)
+    .charge(-1000)
+    .friction(0.1)
 
 var svg;
 
@@ -10104,7 +10105,6 @@ module.exports = {
 
         nodeG
           .attr('transform', function(d) {
-            debugger;
             var nodeW = this.getBBox().width;
             var nodeH = this.getBBox().height;
 
