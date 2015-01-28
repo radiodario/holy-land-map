@@ -58,7 +58,7 @@
     },
     "Haifa" : {
       "name" : "Haifa",
-      "anchor" : "start",
+      "anchor" : "end",
       "coordinates" : [35.033967, 32.792478]
     },
     "Dead Sea" : {
