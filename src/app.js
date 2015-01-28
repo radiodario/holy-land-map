@@ -6,30 +6,42 @@ var processData = require('./processData');
 var width = 760;
 var height = 1160;
 
-var svg = d3.select("body").append("svg")
+var cont = d3.select("body").append("div")
+  .attr("class", "container");
+
+var canvas = cont.append("canvas")
   .attr("width", width)
   .attr("height", height);
 
+var svg = cont.append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+
 map.init(svg, width, height);
+map.initCanvas(canvas, width, height);
 graph.init(svg, width, height);
 
 var holyLand, towns, trips;
 
+// XXX use promises for this
 d3.json("data/holy_land.json", function(error, holyLand) {
   if (error) return console.error(error);
 
-  map.draw(holyLand)
+  map.processData(holyLand)
+
+  map.drawCanvas(holyLand)
+  // map.drawSVG(holyLand)
 
   d3.json("data/towns.json", function(error, towns) {
     if (error) return console.error(error);
-
-    map.drawTowns(towns);
 
     d3.csv("data/trips.csv", function(error, trips) {
 
       if (error) return console.error(error);
 
       map.drawTrips(towns, trips);
+      map.drawTowns(towns);
 
       graph.draw(processData.towns(towns), processData.trips(towns, trips));
 

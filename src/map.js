@@ -25,14 +25,25 @@ var projection = d3.geo.albers()
   .rotate([0, 0])
   .scale(20000);
 
+var path = d3.geo.path()
+  .projection(projection)
+  .pointRadius(2);
+
+var canvasPath = d3.geo.path()
+  .projection(projection)
+  .pointRadius(2);
 
 var path = d3.geo.path()
   .projection(projection)
   .pointRadius(2);
 
 var svg;
+var canvas;
+var ctx;
 
 var towns;
+
+var holyLand;
 
 module.exports = {
 
@@ -48,11 +59,75 @@ module.exports = {
     svg = container;
   },
 
-  draw : function(holyLand) {
+  // process all the topojson related tings
+  processData: function(topojsonData) {
+
+    holyLand = topojsonData;
+
     subunits = topojson.feature(holyLand, holyLand.objects.holy_admin);
     places  = topojson.feature(holyLand, holyLand.objects.holy_places);
     water = topojson.feature(holyLand, holyLand.objects.holy_water);
     rivers = topojson.feature(holyLand, holyLand.objects.holy_rivers);
+
+  },
+
+
+  initCanvas: function(container, width, height) {
+    canvas = container.node();
+    ctx = canvas.getContext("2d");
+    canvasPath.context(ctx);
+  },
+
+
+  drawCanvas: function() {
+    // draw the sea
+    ctx.fillStyle = "skyblue";
+    ctx.fillRect(0, 0, w, h);
+
+
+    // draw subunits (countries)
+    ctx.fillStyle = "white";
+    canvasPath(subunits)
+    // ctx.stroke();
+    ctx.fill();
+
+
+    // draw israel
+
+
+    holyLand.objects.holy_admin
+    debugger;
+
+
+    // draw the boundary lines
+    canvasPath(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
+        return a !== b }))
+    ctx.setLineDash([2,2])
+    ctx.lineWidth = 0.25
+    ctx.stroke();
+
+
+    canvasPath()
+
+
+    ctx.beginPath();
+    // draw the water features
+    ctx.strokeStyle = "skyblue";
+    ctx.setLineDash([])
+    canvasPath(rivers)
+    ctx.stroke();
+    ctx.fillStyle = "skyblue";
+    ctx.closePath();
+
+    ctx.lineWidth = .75
+    canvasPath(water);
+    ctx.stroke();
+    // ctx.fill();
+
+  },
+
+
+  drawSVG : function() {
 
     svg.append("rect")
       .classed("sea", true)
@@ -67,12 +142,6 @@ module.exports = {
 
     waterLayer = svg.append("g")
       .attr("class", "water-layer");
-
-    tripsLayer = svg.append("g")
-      .attr("class", "trips-layer");
-
-    townsLayer = svg.append("g")
-      .attr("class", "towns-layer");
 
     politicalLayer.selectAll(".subunit")
       .data(subunits.features)
@@ -138,6 +207,7 @@ module.exports = {
       .enter()
         .append("path")
         .attr("class", function(d) {
+          console.log(d.properties)
           return "water-feature " + d.properties.name;
         })
         .attr("d", path)
@@ -151,6 +221,10 @@ module.exports = {
   },
 
   drawTrips: function(towns, trips) {
+
+    tripsLayer = svg.append("g")
+      .attr("class", "trips-layer");
+
     var lines = tripsLayer.selectAll("line")
         .data(trips);
 
@@ -179,6 +253,10 @@ module.exports = {
   },
 
   drawTowns: function(towns) {
+
+    townsLayer = svg.append("g")
+      .attr("class", "towns-layer");
+
 
     var townList = d3.keys(towns.places).map(function(d) {
       var t = towns.places[d];
