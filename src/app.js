@@ -30,8 +30,8 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
   map.processData(holyLand)
 
-  map.drawCanvas(holyLand)
-  // map.drawSVG(holyLand)
+  // map.drawCanvas(holyLand)
+  map.drawSVG(holyLand)
 
   d3.json("data/towns.json", function(error, towns) {
     if (error) return console.error(error);
