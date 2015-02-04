@@ -10,17 +10,30 @@ var cont = d3.select("body").append("div")
   .attr("class", "container");
 
 var canvas = cont.append("canvas")
+  .attr('class', "sourceCanvas")
+  .attr("width", width)
+  .attr("height", height)
+
+var warpedMapCanvas = cont.append("canvas")
+  .attr('class', "destCanvas")
+  .attr("width", width)
+  .attr("height", height)
+
+var mapSvg = cont.append("svg")
+  .attr("class", "mapSvg")
   .attr("width", width)
   .attr("height", height);
 
-var svg = cont.append("svg")
+var graphSvg = cont.append("svg")
+  .attr("class", "graphSvg")
   .attr("width", width)
   .attr("height", height);
 
 
-map.init(svg, width, height);
+
+map.init(mapSvg, graphSvg, width, height);
 map.initCanvas(canvas, width, height);
-graph.init(svg, width, height);
+graph.init(graphSvg, width, height);
 
 var holyLand, towns, trips;
 
@@ -32,6 +45,7 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
   // map.drawCanvas(holyLand)
   map.drawSVG(holyLand)
+  // map.mapToCanvas();
 
   d3.json("data/towns.json", function(error, towns) {
     if (error) return console.error(error);
@@ -43,7 +57,7 @@ d3.json("data/holy_land.json", function(error, holyLand) {
       map.drawTrips(towns, trips);
       map.drawTowns(towns);
 
-      graph.draw(processData.towns(towns), processData.trips(towns, trips));
+      graph.draw(processData.towns(towns), processData.trips(towns, trips), canvas.node(), warpedMapCanvas.node());
 
     });
 
@@ -60,6 +74,7 @@ var hideTrips = document.querySelector('#hideTrips');
 var showTowns = document.querySelector('#showTowns');
 var hideTowns = document.querySelector('#hideTowns');
 var doGraph = document.querySelector('#doGraph');
+var doMapToCanvas = document.querySelector('#doMapToCanvas');
 
 showMap.addEventListener('click', map.showMap.bind(map));
 hideMap.addEventListener('click', map.hideMap.bind(map));
@@ -67,4 +82,8 @@ showTrips.addEventListener('click', map.showTrips.bind(map));
 hideTrips.addEventListener('click', map.hideTrips.bind(map));
 showTowns.addEventListener('click', map.showTowns.bind(map));
 hideTowns.addEventListener('click', map.hideTowns.bind(map));
-doGraph.addEventListener('click', graph.start);
+doGraph.addEventListener('click', function() {
+  map.mapToCanvas();
+  graph.start();
+});
+// doMapToCanvas.addEventListener('click', map.mapToCanvas.bind(map));

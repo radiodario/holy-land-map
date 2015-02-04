@@ -1,9 +1,10 @@
 var d3 = require('d3');
+var warper = require('./warper');
 
 var force = d3.layout.force()
     .gravity(0)
     .charge(-1000)
-    .friction(0.1)
+    .friction(0.01)
 
 var svg;
 
@@ -20,13 +21,15 @@ module.exports = {
     svg = container;
   },
 
-  draw: function (nodes, links) {
+  draw: function (nodes, links, sourceCanvas, destinationCanvas) {
 
     nodeG = svg.selectAll('.towns-layer .place');
     linkG = svg.selectAll('.trips-layer .trip');
 
     nodeG.data(nodes)
     linkG.data(links)
+
+    warper.init(sourceCanvas, destinationCanvas, w, h, nodes);
 
     force
       .linkDistance(function(d) {
@@ -35,7 +38,7 @@ module.exports = {
       .nodes(nodes)
       .links(links)
       .on("tick", function() {
-
+        warper.draw(nodes);
         nodeG
           .attr('transform', function(d) {
             var nodeW = this.getBBox().width;
