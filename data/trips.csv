@@ -8,6 +8,7 @@ time,to,from
 150,Damascus Gate,Holon
 120,Damascus Gate,Jaffa
 210,Jaffa,Ramallah
+41,Jaffa,Holon
 540,Hebron,Gaza
 150,Damascus Gate,Dead Sea
 60,Beit Sahour,Dead Sea
@@ -35,3 +36,4 @@ time,to,from
 150,Jenin,Haifa
 150,Jenin,Nazareth
 180,Jenin,Jaffa
+42,Haifa,Nazareth

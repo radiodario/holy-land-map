@@ -7,6 +7,15 @@ svg {
   -webkit-transform: translate3d(0, 0, 0);
   /* or */
 }
+.container {
+  position: relative;
+}
+.container svg,
+.container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .subunit {
   fill: white;
 }
@@ -59,4 +68,7 @@ text {
 .trip {
   stroke: rgba(20, 20, 20, 0.2);
   stroke-width: 2px;
+}
+.sourceCanvas {
+  opacity: 0;
 }
