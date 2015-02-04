@@ -1,5 +1,7 @@
 var d3 = require('d3');
 var topojson = require('topojson');
+var canvg = require('./svgToCanvas/canvg');
+
 
 var subunits;
 var places;
@@ -37,7 +39,7 @@ var path = d3.geo.path()
   .projection(projection)
   .pointRadius(2);
 
-var svg;
+var mapSvg, graphSvg;
 var canvas;
 var ctx;
 
@@ -47,7 +49,7 @@ var holyLand;
 
 module.exports = {
 
-  init: function(container, width, height) {
+  init: function(mapContainer, graphContainer, width, height) {
 
     w = width;
     h = height;
@@ -56,7 +58,9 @@ module.exports = {
       .translate([width/2, height/2])
       .clipExtent([[0, 0], [width, height]]);
 
-    svg = container;
+    mapSvg = mapContainer;
+    // mapSvg = d3.select(document.createElement('svg'));
+    graphSvg = graphContainer;
   },
 
   // process all the topojson related tings
@@ -78,6 +82,14 @@ module.exports = {
     canvasPath.context(ctx);
   },
 
+  mapToCanvas: function() {
+
+    var tmp = document.createElement("div");
+    tmp.appendChild(mapSvg.node());
+    var mapSvgString = tmp.innerHTML;
+
+    canvg(canvas, mapSvgString, 0, 0, w, h);
+  },
 
   drawCanvas: function() {
     // draw the sea
@@ -93,11 +105,7 @@ module.exports = {
 
 
     // draw israel
-
-
     holyLand.objects.holy_admin
-    debugger;
-
 
     // draw the boundary lines
     canvasPath(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
@@ -129,18 +137,19 @@ module.exports = {
 
   drawSVG : function() {
 
-    svg.append("rect")
+    mapSvg.append("rect")
       .classed("sea", true)
       .attr('x', 0)
       .attr('y', 0)
       .attr('width', w)
       .attr('height', h)
+      .style("fill", "skyblue")
 
 
-    politicalLayer = svg.append("g")
+    politicalLayer = mapSvg.append("g")
       .attr("class", "political-layer");
 
-    waterLayer = svg.append("g")
+    waterLayer = mapSvg.append("g")
       .attr("class", "water-layer");
 
     politicalLayer.selectAll(".subunit")
@@ -149,18 +158,38 @@ module.exports = {
         .append("path")
         .attr("class", function(d) { return "subunit " + d.id; })
         .attr("d", path)
+        .attr("fill", function(d) {
+          if (d.id === 'GAZ') {
+            return "#ddc";
+          }
+          if (d.id === 'ISR') {
+            return "#cdd";
+          }
+          if (d.id === 'WEB') {
+            return "#ddc";
+          }
+          return "white";
+        });
 
     politicalLayer.append("path")
       .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
         return a !== b }))
       .attr("d", path)
       .attr("class", "subunit-boundary")
+      .style("fill", "none")
+      .style("stroke", "#777")
+      .style("stroke-dasharray", "2,2")
+      .style("stroke-linejoin", "round")
+
+
 
     politicalLayer.append("path")
       .datum(topojson.mesh(holyLand, holyLand.objects.holy_admin, function(a, b) {
         return a === b && ": EGY JOR LBN SYR".indexOf(a.id) > 0}))
       .attr("d", path)
       .attr("class", "subunit-boundary neighbour")
+      .style("stroke-dasharray", "0.1,0.1")
+      .style("fill", "none");
 
 
     politicalLayer.selectAll(".subunit-label")
@@ -201,16 +230,24 @@ module.exports = {
         .text(function(d) {
           return d.properties.name;
         })
+        .style({
+          "fill" : "#777",
+          "fill-opacity" : .5,
+          "font-size" : "20px",
+          "font-weight" : 300,
+          "text-anchor" : "middle"
+        });
 
     waterLayer.selectAll(".water-feature")
       .data(water.features)
       .enter()
         .append("path")
         .attr("class", function(d) {
-          console.log(d.properties)
           return "water-feature " + d.properties.name;
         })
         .attr("d", path)
+        .style("fill-opacity", 0.5)
+        .style("fill", "skyblue")
 
     waterLayer.selectAll(".river")
       .data(rivers.features)
@@ -218,11 +255,14 @@ module.exports = {
         .append("path")
         .attr("class", function(d) { return "river " + d.properties.name })
         .attr("d", path)
+        .style("fill", "none")
+        .style("stroke", "skyblue")
+        .style("stroke-opacity", 0.5);
   },
 
   drawTrips: function(towns, trips) {
 
-    tripsLayer = svg.append("g")
+    tripsLayer = graphSvg.append("g")
       .attr("class", "trips-layer");
 
     var lines = tripsLayer.selectAll("line")
@@ -254,7 +294,7 @@ module.exports = {
 
   drawTowns: function(towns) {
 
-    townsLayer = svg.append("g")
+    townsLayer = graphSvg.append("g")
       .attr("class", "towns-layer");
 
 
