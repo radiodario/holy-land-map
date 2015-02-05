@@ -10129,6 +10129,15 @@ module.exports = {
 
     warper.init(sourceCanvas, destinationCanvas, w, h, nodes);
 
+    // var avgSpeed = 0;
+
+    // links.map(function(d) {
+    //   d.speed = d.distance / (+d.time/60);
+    //   avgSpeed += d.speed;
+    // })
+
+    // avgSpeed /= links.length;
+
     force
       .linkDistance(function(d) {
         return +d.time;
