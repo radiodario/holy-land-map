@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Raleway:500,700,400,300);
+@import url(http://fonts.googleapis.com/css?family=Raleway:500,700,400,300,200);
 body {
   margin: 0;
   background-color: #424242;
@@ -47,16 +47,24 @@ div#header {
   height: 550px;
   width: 100%;
   top: 50px;
+  text-shadow: 0px 1px 2px #333;
 }
 @media screen and (max-width: 767px) {
   div#header {
     height: 350px;
   }
 }
+div#header div#tagline {
+  font-size: 14pt;
+  font-weight: 300;
+}
+div#header div#tagline,
+div#header h1 {
+  margin-bottom: 40px;
+}
 div#header h1 {
   text-transform: uppercase;
   margin-top: 0;
-  margin-bottom: 30px;
   font-size: 62pt;
   width: 85%;
   margin-left: auto;
@@ -65,6 +73,7 @@ div#header h1 {
 @media screen and (max-width: 767px) {
   div#header h1 {
     font-size: 40pt;
+    margin-bottom: 20px;
   }
 }
 div#header div.people div.person {
@@ -110,12 +119,17 @@ div#content {
 }
 div#article {
   width: 35%;
+  position: absolute;
+  left: 0;
+  top: 0;
   margin-left: 20px;
-  font-size: 14pt;
+  font-size: 12pt;
+  z-index: 300;
 }
 div#map {
+  z-index: 3;
   position: absolute;
-  top: 0;
+  top: 20px;
   right: 20px;
   width: 760px;
   height: 1160px;
