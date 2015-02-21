@@ -10126,15 +10126,16 @@ module.exports = {
   },
 
   land : {
-    GAZ: "#223",
-    ISR: "#322",
-    WEB: "#332",
+    GAZ: "rgb(70, 60, 40)", //"#223",
+    ISR: "rgb(60, 110, 100)", //#322",
+    WEB: "rgb(70, 60, 40)", //"#332",
     rest: background
   },
 
   boundaries : {
     subunit: "#777",
-    label: "#777"
+    label: "#777",
+    main: "#AAA"
   },
 
 
@@ -10460,7 +10461,12 @@ module.exports = {
           return d.properties.name;
         })
         .style({
-          "fill" : colors.boundaries.label,
+          "fill" : function(d) {
+            if ("GAZ ISR WEB".indexOf(d.id) >= 0) {
+              return colors.boundaries.main;
+            }
+            return colors.boundaries.label
+          },
           "fill-opacity" : .5,
           "font-size" : "20px",
           "font-weight" : 300,

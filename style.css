@@ -165,7 +165,6 @@ svg {
   stroke-dasharray: 0.1,0.1;
 }
 .subunit-label {
-  fill: #777;
   fill-opacity: .5;
   font-size: 20px;
   font-weight: 300;
