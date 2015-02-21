@@ -11,9 +11,10 @@ function lookupTown(townlist, townname) {
 
   for (i = 0, l = townlist.length; i < l; i++) {
     if (townlist[i].name === townname) return i;
+    if (townlist[i].displayname === townname) return i;
   }
 
-  return -1 // we haven't found it;
+  throw new Error("couldn't find " + townname)
 
 }
 

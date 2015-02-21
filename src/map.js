@@ -328,6 +328,7 @@ module.exports = {
         return (d.anchor === "start") ? 6 : -6;
       })
       .text(function(d) {
+        if (d.hasOwnProperty('displayname')) return d.displayname;
         return d.name;
       });
   },

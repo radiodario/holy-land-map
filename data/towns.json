@@ -3,16 +3,19 @@
 
     "Beit Sahour" : {
       "name" : "Beit Sahour",
+      "displayname" : "Beit Sahour",
       "anchor" : "start",
       "coordinates" : [35.221108, 31.704590]
     },
     "Damascus Gate" : {
       "name" : "Damascus Gate",
+      "displayname" : "Damascus Gate",
       "anchor" : "end",
       "coordinates" : [35.228650, 31.781680]
     },
     "Jaffa" : {
       "name" : "Jaffa",
+      "displayname" : "Tel Aviv - Jaffa",
       "anchor" : "end",
       "coordinates" : [34.756239, 32.054983]
     },
@@ -38,6 +41,7 @@
     },
     "Ben Gurion" : {
       "name" : "Ben Gurion",
+      "displayname" : "International Airport",
       "anchor" : "start",
       "coordinates" : [34.873083, 32.003653]
     },
