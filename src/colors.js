@@ -20,7 +20,7 @@ module.exports = {
   boundaries : {
     subunit: "#777",
     label: "#777"
-  }
+  },
 
 
   place : {
