@@ -10014,7 +10014,7 @@ var processData = require('./processData');
 var width = 760;
 var height = 1160;
 
-var cont = d3.select("body").append("div")
+var cont = d3.select("div#map").append("div")
   .attr("class", "container");
 
 var canvas = cont.append("canvas")
@@ -10095,7 +10095,38 @@ doGraph.addEventListener('click', function() {
   graph.start();
 });
 // doMapToCanvas.addEventListener('click', map.mapToCanvas.bind(map));
-},{"./graph":4,"./map":5,"./processData":6,"d3":1}],4:[function(require,module,exports){
+},{"./graph":5,"./map":6,"./processData":7,"d3":1}],4:[function(require,module,exports){
+
+
+var background = "#424242";
+
+
+module.exports = {
+
+  water : {
+    sea: background,
+    rivers: "#1d365d"
+  },
+
+  land : {
+    GAZ: "#223",
+    ISR: "#322",
+    WEB: "#332",
+    rest: background
+  },
+
+  boundaries : {
+    subunit: "#777",
+    label: "#777"
+  },
+
+
+  place : {
+    label: "#aaa"
+  }
+
+}
+},{}],5:[function(require,module,exports){
 var d3 = require('d3');
 var warper = require('./warper');
 
@@ -10178,11 +10209,11 @@ module.exports = {
   }
 
 }
-},{"./warper":11,"d3":1}],5:[function(require,module,exports){
+},{"./warper":12,"d3":1}],6:[function(require,module,exports){
 var d3 = require('d3');
 var topojson = require('topojson');
 var canvg = require('./svgToCanvas/canvg');
-
+var colors = require('./colors');
 
 var subunits;
 var places;
@@ -10274,12 +10305,12 @@ module.exports = {
 
   drawCanvas: function() {
     // draw the sea
-    ctx.fillStyle = "skyblue";
+    ctx.fillStyle = colors.water.sea;
     ctx.fillRect(0, 0, w, h);
 
 
     // draw subunits (countries)
-    ctx.fillStyle = "white";
+    ctx.fillStyle = colors.land.rest;
     canvasPath(subunits)
     // ctx.stroke();
     ctx.fill();
@@ -10301,11 +10332,11 @@ module.exports = {
 
     ctx.beginPath();
     // draw the water features
-    ctx.strokeStyle = "skyblue";
+    ctx.strokeStyle = colors.water.rivers;
     ctx.setLineDash([])
     canvasPath(rivers)
     ctx.stroke();
-    ctx.fillStyle = "skyblue";
+    ctx.fillStyle = colors.water.rivers;
     ctx.closePath();
 
     ctx.lineWidth = .75
@@ -10324,7 +10355,7 @@ module.exports = {
       .attr('y', 0)
       .attr('width', w)
       .attr('height', h)
-      .style("fill", "skyblue")
+      .style("fill", colors.water.sea)
 
 
     politicalLayer = mapSvg.append("g")
@@ -10341,15 +10372,15 @@ module.exports = {
         .attr("d", path)
         .attr("fill", function(d) {
           if (d.id === 'GAZ') {
-            return "#ddc";
+            return colors.land.GAZ;
           }
           if (d.id === 'ISR') {
-            return "#cdd";
+            return colors.land.ISR;
           }
           if (d.id === 'WEB') {
-            return "#ddc";
+            return colors.land.WEB;
           }
-          return "white";
+          return colors.land.rest;
         });
 
     politicalLayer.append("path")
@@ -10358,7 +10389,7 @@ module.exports = {
       .attr("d", path)
       .attr("class", "subunit-boundary")
       .style("fill", "none")
-      .style("stroke", "#777")
+      .style("stroke", colors.boundaries.subunit)
       .style("stroke-dasharray", "2,2")
       .style("stroke-linejoin", "round")
 
@@ -10412,7 +10443,7 @@ module.exports = {
           return d.properties.name;
         })
         .style({
-          "fill" : "#777",
+          "fill" : colors.boundaries.label,
           "fill-opacity" : .5,
           "font-size" : "20px",
           "font-weight" : 300,
@@ -10428,7 +10459,7 @@ module.exports = {
         })
         .attr("d", path)
         .style("fill-opacity", 0.5)
-        .style("fill", "skyblue")
+        .style("fill", colors.water.rivers)
 
     waterLayer.selectAll(".river")
       .data(rivers.features)
@@ -10437,8 +10468,8 @@ module.exports = {
         .attr("class", function(d) { return "river " + d.properties.name })
         .attr("d", path)
         .style("fill", "none")
-        .style("stroke", "skyblue")
-        .style("stroke-opacity", 0.5);
+        .style("stroke", colors.water.rivers)
+        .style("stroke-opacity", 0.05);
   },
 
   drawTrips: function(towns, trips) {
@@ -10573,7 +10604,7 @@ module.exports = {
 
 
 }
-},{"./svgToCanvas/canvg":9,"d3":1,"topojson":2}],6:[function(require,module,exports){
+},{"./colors":4,"./svgToCanvas/canvg":10,"d3":1,"topojson":2}],7:[function(require,module,exports){
 // create a nodes array by iterating over the keys
 function townlist(towns) {
   return Object.keys(towns.places).map(function(k) {
@@ -10650,7 +10681,7 @@ module.exports = {
 
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /** Solves a system of linear equations.
 
 t1 = (a * r1) + (b + s1) + c
@@ -10679,7 +10710,7 @@ module.exports = function linearSolution(r1, s1, t1, r2, s2, t2, r3, s3, t3){
 
     return [a, b, c];
 }
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /*
 
 StackBlur - a fast almost Gaussian Blur For Canvas
@@ -11291,7 +11322,7 @@ function BlurStack()
 	this.a = 0;
 	this.next = null;
 }
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var RGBColor = require('./rgbcolor');
 
 /*
@@ -14250,7 +14281,7 @@ module.exports = function(canvas, s, dx, dy, dw, dh) {
 			scaleHeight: dh
 		});
 	};
-},{"./rgbcolor":10}],10:[function(require,module,exports){
+},{"./rgbcolor":11}],11:[function(require,module,exports){
 /**
  * A class to parse color values
  * @author Stoyan Stefanov <sstoo@gmail.com>
@@ -14540,7 +14571,7 @@ module.exports = function RGBColor(color_string)
 }
 
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var d3 = require('d3');
 
 var solver = require('./solver');
@@ -14678,4 +14709,4 @@ module.exports = {
 
 
 
-},{"./solver":7,"d3":1}]},{},[3,4,5,6,7,8,9,10,11])
+},{"./solver":8,"d3":1}]},{},[3,4,5,6,7,8,9,10,11,12])

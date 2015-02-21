@@ -1,5 +1,115 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:500,700,400,300);
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  background-color: #424242;
+  color: #ddd;
+  font-family: Raleway, Helvetica neue, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+div#hero-wrapper {
+  position: relative;
+  height: 600px;
+}
+@media screen and (max-width: 767px) {
+  div#hero-wrapper {
+    height: 400px;
+  }
+}
+div#hero {
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+div#hero video#banner {
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  object-fit: cover;
+}
+@media screen and (max-width: 1080px) {
+  div#hero video#banner {
+    height: 100%;
+    width: auto;
+  }
+}
+.text-center {
+  text-align: center;
+}
+div#header {
+  position: relative;
+  height: 550px;
+  width: 100%;
+  top: 50px;
+}
+@media screen and (max-width: 767px) {
+  div#header {
+    height: 350px;
+  }
+}
+div#header h1 {
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 70pt;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media screen and (max-width: 767px) {
+  div#header h1 {
+    font-size: 40pt;
+  }
+}
+div#header div.people div.person {
+  width: 33%;
+  float: left;
+  text-align: center;
+}
+div#header div.people div.person img.face {
+  width: 80px;
+  height: 80px;
+}
+@media screen and (max-width: 767px) {
+  div#header div.people div.person img.face {
+    width: 40px;
+    height: 40px;
+  }
+}
+img.round {
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  border-radius: 40px;
+}
+.va-container {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.va-middle {
+  vertical-align: middle;
+  display: table-cell;
+}
+div#content {
+  width: 100%;
+  position: relative;
+}
+div#article {
+  width: 35%;
+  margin-left: 20px;
+}
+div#map {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: 760px;
+  height: 1160px;
 }
 svg {
   -webkit-backface-visibility: hidden;
@@ -15,30 +125,6 @@ svg {
   position: absolute;
   top: 0;
   left: 0;
-}
-.subunit {
-  fill: white;
-}
-.subunit.GAZ {
-  fill: #ddc;
-}
-.subunit.ISR {
-  fill: #cdd;
-}
-.subunit.WEB {
-  fill: #ddc;
-}
-.river {
-  fill: none;
-  stroke: skyblue;
-  stroke-opacity: 0.5;
-}
-.water-feature {
-  fill-opacity: 0.5;
-  fill: skyblue;
-}
-rect.sea {
-  fill: skyblue ;
 }
 .subunit-boundary {
   fill: none;
@@ -58,11 +144,10 @@ rect.sea {
 }
 .place,
 .place-label {
-  fill: #444;
+  fill: #aaa;
 }
 text {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   pointer-events: none;
 }
 .trip {
