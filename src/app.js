@@ -6,7 +6,7 @@ var processData = require('./processData');
 var width = 760;
 var height = 1160;
 
-var cont = d3.select("body").append("div")
+var cont = d3.select("div#map").append("div")
   .attr("class", "container");
 
 var canvas = cont.append("canvas")

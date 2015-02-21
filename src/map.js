@@ -1,7 +1,7 @@
 var d3 = require('d3');
 var topojson = require('topojson');
 var canvg = require('./svgToCanvas/canvg');
-
+var colors = require('./colors');
 
 var subunits;
 var places;
@@ -93,12 +93,12 @@ module.exports = {
 
   drawCanvas: function() {
     // draw the sea
-    ctx.fillStyle = "skyblue";
+    ctx.fillStyle = colors.water.sea;
     ctx.fillRect(0, 0, w, h);
 
 
     // draw subunits (countries)
-    ctx.fillStyle = "white";
+    ctx.fillStyle = colors.land.rest;
     canvasPath(subunits)
     // ctx.stroke();
     ctx.fill();
@@ -120,11 +120,11 @@ module.exports = {
 
     ctx.beginPath();
     // draw the water features
-    ctx.strokeStyle = "skyblue";
+    ctx.strokeStyle = colors.water.rivers;
     ctx.setLineDash([])
     canvasPath(rivers)
     ctx.stroke();
-    ctx.fillStyle = "skyblue";
+    ctx.fillStyle = colors.water.rivers;
     ctx.closePath();
 
     ctx.lineWidth = .75
@@ -143,7 +143,7 @@ module.exports = {
       .attr('y', 0)
       .attr('width', w)
       .attr('height', h)
-      .style("fill", "skyblue")
+      .style("fill", colors.water.sea)
 
 
     politicalLayer = mapSvg.append("g")
@@ -160,15 +160,15 @@ module.exports = {
         .attr("d", path)
         .attr("fill", function(d) {
           if (d.id === 'GAZ') {
-            return "#ddc";
+            return colors.land.GAZ;
           }
           if (d.id === 'ISR') {
-            return "#cdd";
+            return colors.land.ISR;
           }
           if (d.id === 'WEB') {
-            return "#ddc";
+            return colors.land.WEB;
           }
-          return "white";
+          return colors.land.rest;
         });
 
     politicalLayer.append("path")
@@ -177,7 +177,7 @@ module.exports = {
       .attr("d", path)
       .attr("class", "subunit-boundary")
       .style("fill", "none")
-      .style("stroke", "#777")
+      .style("stroke", colors.boundaries.subunit)
       .style("stroke-dasharray", "2,2")
       .style("stroke-linejoin", "round")
 
@@ -231,7 +231,7 @@ module.exports = {
           return d.properties.name;
         })
         .style({
-          "fill" : "#777",
+          "fill" : colors.boundaries.label,
           "fill-opacity" : .5,
           "font-size" : "20px",
           "font-weight" : 300,
@@ -247,7 +247,7 @@ module.exports = {
         })
         .attr("d", path)
         .style("fill-opacity", 0.5)
-        .style("fill", "skyblue")
+        .style("fill", colors.water.rivers)
 
     waterLayer.selectAll(".river")
       .data(rivers.features)
@@ -256,8 +256,8 @@ module.exports = {
         .attr("class", function(d) { return "river " + d.properties.name })
         .attr("d", path)
         .style("fill", "none")
-        .style("stroke", "skyblue")
-        .style("stroke-opacity", 0.5);
+        .style("stroke", colors.water.rivers)
+        .style("stroke-opacity", 0.05);
   },
 
   drawTrips: function(towns, trips) {
