@@ -10509,6 +10509,7 @@ module.exports = {
         return (d.anchor === "start") ? 6 : -6;
       })
       .text(function(d) {
+        if (d.hasOwnProperty('displayname')) return d.displayname;
         return d.name;
       });
   },
@@ -10586,9 +10587,10 @@ function lookupTown(townlist, townname) {
 
   for (i = 0, l = townlist.length; i < l; i++) {
     if (townlist[i].name === townname) return i;
+    if (townlist[i].displayname === townname) return i;
   }
 
-  return -1 // we haven't found it;
+  throw new Error("couldn't find " + townname)
 
 }
 
