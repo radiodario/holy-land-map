@@ -263,6 +263,8 @@ module.exports = {
   drawTrips: function(towns, trips) {
 
     tripsLayer = graphSvg.append("g")
+      // start them hidden by default
+      .style("display", "none")
       .attr("class", "trips-layer");
 
     var lines = tripsLayer.selectAll("line")
@@ -362,6 +364,7 @@ module.exports = {
 
   showTrips : function() {
     tripsLayer
+      .style('opacity', 0)
       .style('display', null)
       .transition()
       .duration(duration)

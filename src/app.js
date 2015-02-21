@@ -56,7 +56,6 @@ d3.json("data/holy_land.json", function(error, holyLand) {
 
       map.drawTrips(towns, trips);
       map.drawTowns(towns);
-
       graph.draw(processData.towns(towns), processData.trips(towns, trips), canvas.node(), warpedMapCanvas.node());
 
     });
