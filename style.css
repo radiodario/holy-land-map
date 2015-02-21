@@ -122,6 +122,9 @@ div#map {
 }
 section {
   height: 1160px;
+  color: #fff;
+  text-shadow: 0px 1px 2px #333;
+  font-weight: 500;
 }
 svg {
   -webkit-backface-visibility: hidden;
@@ -156,7 +159,7 @@ svg {
 }
 .place,
 .place-label {
-  fill: #aaa;
+  fill: #fff;
 }
 text {
   font-size: 11px;

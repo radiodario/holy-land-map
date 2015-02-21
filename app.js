@@ -10141,7 +10141,7 @@ module.exports = {
 
 
   place : {
-    label: "#aaa"
+    label: "#fff"
   }
 
 }
