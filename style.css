@@ -57,7 +57,7 @@ div#header h1 {
   text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 30px;
-  font-size: 70pt;
+  font-size: 62pt;
   width: 85%;
   margin-left: auto;
   margin-right: auto;
@@ -82,6 +82,12 @@ div#header div.people div.person img.face {
     height: 40px;
   }
 }
+.head-content {
+  max-width: 1400px;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 img.round {
   -webkit-border-radius: 40px;
   -moz-border-radius: 40px;
@@ -98,17 +104,23 @@ img.round {
 }
 div#content {
   width: 100%;
+  margin: 0 auto;
+  max-width: 1400px;
   position: relative;
 }
 div#article {
   width: 35%;
   margin-left: 20px;
+  font-size: 14pt;
 }
 div#map {
   position: absolute;
   top: 0;
   right: 20px;
   width: 760px;
+  height: 1160px;
+}
+section {
   height: 1160px;
 }
 svg {

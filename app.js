@@ -10010,7 +10010,7 @@ var d3 = require('d3');
 var map = require('./map');
 var graph = require('./graph');
 var processData = require('./processData');
-
+var offset = require('./offset');
 var width = 760;
 var height = 1160;
 
@@ -10095,7 +10095,26 @@ doGraph.addEventListener('click', function() {
   graph.start();
 });
 // doMapToCanvas.addEventListener('click', map.mapToCanvas.bind(map));
-},{"./graph":5,"./map":6,"./processData":7,"d3":1}],4:[function(require,module,exports){
+
+var map_cont = document.querySelector('div#map');
+var content_element = document.querySelector('div#content');
+
+// make canvas stay at top
+function stick() {
+
+  var art_top = offset(content_element).top;
+  console.log(art_top)
+  if (art_top <= 0) {
+    map_cont.style.top = (20 + Math.abs(art_top) | 0) + 'px'
+  } else {
+    map_cont.style.top = 0;
+  }
+
+}
+
+document.addEventListener('scroll', stick);
+
+},{"./graph":5,"./map":6,"./offset":7,"./processData":8,"d3":1}],4:[function(require,module,exports){
 
 
 var background = "#424242";
@@ -10209,7 +10228,7 @@ module.exports = {
   }
 
 }
-},{"./warper":12,"d3":1}],6:[function(require,module,exports){
+},{"./warper":13,"d3":1}],6:[function(require,module,exports){
 var d3 = require('d3');
 var topojson = require('topojson');
 var canvg = require('./svgToCanvas/canvg');
@@ -10604,7 +10623,23 @@ module.exports = {
 
 
 }
-},{"./colors":4,"./svgToCanvas/canvg":10,"d3":1,"topojson":2}],7:[function(require,module,exports){
+},{"./colors":4,"./svgToCanvas/canvg":11,"d3":1,"topojson":2}],7:[function(require,module,exports){
+module.exports = function(el) {
+  if (el.getBoundingClientRect) {
+      return el.getBoundingClientRect();
+  }
+  else {
+    var x = 0, y = 0;
+    do {
+        x += el.offsetLeft - el.scrollLeft;
+        y += el.offsetTop - el.scrollTop;
+    }
+    while (el = el.offsetParent);
+
+    return { "left": x, "top": y }
+  }
+}
+},{}],8:[function(require,module,exports){
 // create a nodes array by iterating over the keys
 function townlist(towns) {
   return Object.keys(towns.places).map(function(k) {
@@ -10681,7 +10716,7 @@ module.exports = {
 
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /** Solves a system of linear equations.
 
 t1 = (a * r1) + (b + s1) + c
@@ -10710,7 +10745,7 @@ module.exports = function linearSolution(r1, s1, t1, r2, s2, t2, r3, s3, t3){
 
     return [a, b, c];
 }
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*
 
 StackBlur - a fast almost Gaussian Blur For Canvas
@@ -11322,7 +11357,7 @@ function BlurStack()
 	this.a = 0;
 	this.next = null;
 }
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var RGBColor = require('./rgbcolor');
 
 /*
@@ -14281,7 +14316,7 @@ module.exports = function(canvas, s, dx, dy, dw, dh) {
 			scaleHeight: dh
 		});
 	};
-},{"./rgbcolor":11}],11:[function(require,module,exports){
+},{"./rgbcolor":12}],12:[function(require,module,exports){
 /**
  * A class to parse color values
  * @author Stoyan Stefanov <sstoo@gmail.com>
@@ -14571,7 +14606,7 @@ module.exports = function RGBColor(color_string)
 }
 
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var d3 = require('d3');
 
 var solver = require('./solver');
@@ -14709,4 +14744,4 @@ module.exports = {
 
 
 
-},{"./solver":8,"d3":1}]},{},[3,4,5,6,7,8,9,10,11,12])
+},{"./solver":9,"d3":1}]},{},[3,4,5,6,7,8,9,10,11,12,13])
