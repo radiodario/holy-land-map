@@ -231,7 +231,12 @@ module.exports = {
           return d.properties.name;
         })
         .style({
-          "fill" : colors.boundaries.label,
+          "fill" : function(d) {
+            if ("GAZ ISR WEB".indexOf(d.id) >= 0) {
+              return colors.boundaries.main;
+            }
+            return colors.boundaries.label
+          },
           "fill-opacity" : .5,
           "font-size" : "20px",
           "font-weight" : 300,
