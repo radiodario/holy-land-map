@@ -92,14 +92,13 @@ var map_cont = document.querySelector('div#map');
 var content_element = document.querySelector('div#content');
 
 // make canvas stay at top
-function stick() {
-
+function stick(e) {
+  e.preventDefault();
   var art_top = offset(content_element).top;
-  console.log(art_top)
   if (art_top <= 0) {
     map_cont.style.top = (20 + Math.abs(art_top) | 0) + 'px'
   } else {
-    map_cont.style.top = 0;
+    map_cont.style.top = 20 + 'px';
   }
 
 }
