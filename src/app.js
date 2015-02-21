@@ -2,7 +2,7 @@ var d3 = require('d3');
 var map = require('./map');
 var graph = require('./graph');
 var processData = require('./processData');
-
+var offset = require('./offset');
 var width = 760;
 var height = 1160;
 
@@ -87,3 +87,21 @@ doGraph.addEventListener('click', function() {
   graph.start();
 });
 // doMapToCanvas.addEventListener('click', map.mapToCanvas.bind(map));
+
+var map_cont = document.querySelector('div#map');
+var content_element = document.querySelector('div#content');
+
+// make canvas stay at top
+function stick() {
+
+  var art_top = offset(content_element).top;
+  console.log(art_top)
+  if (art_top <= 0) {
+    map_cont.style.top = (20 + Math.abs(art_top) | 0) + 'px'
+  } else {
+    map_cont.style.top = 0;
+  }
+
+}
+
+document.addEventListener('scroll', stick);
